@@ -1,6 +1,7 @@
 <?php
 
-function check_for_necessary_stuff() {
+function suaa_check_for_necessary_stuff() {
+	
     // check if all the functions exist
     if (function_exists('wp_generate_auth_cookie') && function_exists('wp_authenticate') && function_exists('wp_validate_auth_cookie') && function_exists('wp_parse_auth_cookie')) {
     // check if accessed trough SSL
@@ -17,5 +18,6 @@ function check_for_necessary_stuff() {
     $errorMessage = array('status' => 'failed', 'message' => 'The functions wp_generate_auth_cookie, wp_validate_auth_cookie, wp_parse_auth_cookie or wp_authenticate doesn\'t exist');
     echo json_encode($errorMessage);
     exit; 
+		
     }
 }

@@ -12,18 +12,18 @@ if (!defined('WPINC')) {
 	die;
 }
 
-function activate_simple_api_authentication() {
+function activate_suaa() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-classes/class-simple-api-authentication-activator.php';
-	simple_api_authentication_activator::activate();
+	suaa_activator::activate();
 }
 
-function uninstall_simple_api_authentication() {
+function uninstall_suaa() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-classes/class-simple-api-authentication-uninstaller.php';
-	simple_api_authentication_uninstaller::uninstall();
+	suaa_uninstaller::uninstall();
 }
 
-register_activation_hook(__FILE__, 'activate_simple_api_authentication');
-register_uninstall_hook(__FILE__, 'uninstall_simple_api_authentication');
+register_activation_hook(__FILE__, 'activate_suaa');
+register_uninstall_hook(__FILE__, 'uninstall_suaa');
 
 
 // No other third party plugin needed 
@@ -81,7 +81,7 @@ function tidywp_admin_add_admin_menu(  ) {
     'Simple User API Authentication',
     'manage_options',
     'simple-user-api-authentication',
-    'simple_user_api_authentication_settings'
+    'suaa_settings'
     );
 }
 
