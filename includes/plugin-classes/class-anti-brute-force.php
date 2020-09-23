@@ -1,28 +1,28 @@
 <?php
 
-function suaa_check_if_brute_force_is_not_reached($username) {
+function suaa_check_if_brute_force_is_not_reached($usernameOrEmail) {
 $bruteForceWrongAttemptsMax = get_option('suaa_brute_force_block_after_attempts');
 
-    $user_id = suaa_check_for_email_or_username($username);
+    $userID = suaa_check_for_email_or_username($usernameOrEmail);
     
-     if ($user_id != false && !empty($user_id)) {
+     if ($userID != false && !empty($userID)) {
         
-        $bruteForceWrongAttempts = get_user_meta($user_id, 'suaa_wrong_brute_force_attempts', true);
-        $bruteForceWrongAttemptsBlockEndTime = get_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', true);
+        $bruteForceWrongAttempts = get_user_meta($userID, 'suaa_wrong_brute_force_attempts', true);
+        $bruteForceWrongAttemptsBlockEndTime = get_user_meta($userID, 'suaa_wrong_brute_force_attempts_end_time', true);
         
            $timestampNow = strtotime('now');
            $secondsDiff =  $timestampNow - $bruteForceWrongAttemptsBlockEndTime;                            
    
    // if attempts if lower then then the max attempts and the time since the last wrong login has expired reset the brute force attempts
    if ($secondsDiff >= 0 && $bruteForceWrongAttemptsMax > intval($bruteForceWrongAttempts)) {
-            update_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', strtotime('now'));     
-            update_user_meta($user_id, 'suaa_wrong_brute_force_attempts', 0);
+            update_user_meta($userID, 'suaa_wrong_brute_force_attempts_end_time', strtotime('now'));     
+            update_user_meta($userID, 'suaa_wrong_brute_force_attempts', 0);
             return true;
    
    // if time is expired reset brute force         
    } else if ($secondsDiff >= 0) {
-            update_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', strtotime('now'));     
-            update_user_meta($user_id, 'suaa_wrong_brute_force_attempts', 0);
+            update_user_meta($userID, 'suaa_wrong_brute_force_attempts_end_time', strtotime('now'));     
+            update_user_meta($userID, 'suaa_wrong_brute_force_attempts', 0);
             return true;
     
     // if attempts are lower then the max attempts it's cool        
@@ -41,20 +41,20 @@ $bruteForceWrongAttemptsMax = get_option('suaa_brute_force_block_after_attempts'
   return false;
 }
 
-function suaa_add_new_brute_force_attempt($username) {
+function suaa_add_new_brute_force_attempt($usernameOrEmail) {
 $bruteForceWrongAttemptsMax = get_option('suaa_brute_force_block_after_attempts');
 $bruteForceWrongAttemptsBlockForTimeInMinutes = get_option('suaa_brute_force_block_time');
 
-    $user_id = suaa_check_for_email_or_username($username);
-    if ($user_id != false && !empty($user_id)) {
+    $userID = suaa_check_for_email_or_username($usernameOrEmail);
+    if ($userID != false && !empty($userID)) {
         
-        $oldBruteForceWrongAttempts = get_user_meta($user_id, 'suaa_wrong_brute_force_attempts', true);
+        $oldBruteForceWrongAttempts = get_user_meta($userID, 'suaa_wrong_brute_force_attempts', true);
         
         if ($bruteForceWrongAttemptsMax <= intval($oldBruteForceWrongAttempts)) {
          return 'You have made to many wrong login attempts... Try again in ' . $bruteForceWrongAttemptsBlockForTimeInMinutes . ' min'; 
         } else{
-         update_user_meta($user_id, 'suaa_wrong_brute_force_attempts', $oldBruteForceWrongAttempts + 1);
-         update_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', strtotime('+ ' . $bruteForceWrongAttemptsBlockForTimeInMinutes . ' min')); 
+         update_user_meta($userID, 'suaa_wrong_brute_force_attempts', $oldBruteForceWrongAttempts + 1);
+         update_user_meta($userID, 'suaa_wrong_brute_force_attempts_end_time', strtotime('+ ' . $bruteForceWrongAttemptsBlockForTimeInMinutes . ' min')); 
          $attemptsToGo = ($bruteForceWrongAttemptsMax - ($oldBruteForceWrongAttempts + 1));
        
        if ($attemptsToGo != 0) {
@@ -70,11 +70,11 @@ $bruteForceWrongAttemptsBlockForTimeInMinutes = get_option('suaa_brute_force_blo
     }
 }
 
-function suaa_check_for_email_or_username($username) {
-    if (is_email($username)) {
-        $user = get_user_by('email', $username);
+function suaa_check_for_email_or_username($usernameOrEmail) {
+    if (is_email($usernameOrEmail)) {
+        $user = get_user_by('email', $usernameOrEmail);
     } else {
-        $user = get_user_by('login', $username);
+        $user = get_user_by('login', $usernameOrEmail);
     }
     
     if ($user) {

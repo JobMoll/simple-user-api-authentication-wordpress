@@ -4,15 +4,15 @@ function suaa_generate_refresh_token(WP_REST_Request $request) {
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-check-for-necessary-stuff.php';
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-anti-brute-force.php';
 
-$username = sanitize_user($request['username']);
+$usernameOrEmail = sanitize_user($request['username_or_email']);
 
-  if (suaa_check_if_brute_force_is_not_reached($username) == true) {
+  if (suaa_check_if_brute_force_is_not_reached($usernameOrEmail) == true) {
     if (suaa_check_for_necessary_stuff() == true) {
-    $current_user_data = wp_authenticate($username, sanitize_user($request['password']));
+    $current_user_data = wp_authenticate($usernameOrEmail, sanitize_user($request['password']));
 
     if (is_wp_error($current_user_data)) {
     header("HTTP/1.1 401 Unauthorized");
-    $errorMessage = array('status' => 'failed', 'message' => suaa_add_new_brute_force_attempt($username));
+    $errorMessage = array('status' => 'failed', 'message' => suaa_add_new_brute_force_attempt($usernameOrEmail));
     echo json_encode($errorMessage);
     exit; 
     } else {

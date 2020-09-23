@@ -45,7 +45,7 @@ register_uninstall_hook(__FILE__, 'uninstall_suaa');
 // Used for getting a refresh token using the user login credentials
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/generate-refresh-token
-// Example body: {"username": "admin", "password": "pass"}
+// Example body: {"username_or_email": "admin", "password": "pass"}
 include 'includes/classes/class-generate-refresh-token.php';
 
 // Used get the acccess token using the refresh token
@@ -65,6 +65,18 @@ include 'includes/classes/class-get-user-data.php';
 // Endpoint: wp-json/simple-user-api-authentication/delete-user-tokens
 // Example body: {"access_token": "access_token_here"}
 include 'includes/classes/class-delete-user-tokens.php';
+
+// Used when the user forgot their password and wants to receive a link to get a new one
+// Request: POST
+// Endpoint: wp-json/simple-user-api-authentication/forgot-password
+// Example body: {"username_or_email": "access_token_here"}
+include 'includes/classes/class-forgot-password.php';
+
+// Used when a new users want to create an account
+// Request: POST
+// Endpoint: wp-json/simple-user-api-authentication/register-a-new-user
+// Example body: {"username": "username", "email": "email"}
+include 'includes/classes/class-register-a-new-user.php';
 
 
 
