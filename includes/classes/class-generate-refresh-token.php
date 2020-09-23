@@ -15,7 +15,6 @@ $username = sanitize_user($request['username']);
 
     if (is_wp_error($current_user_data)) {
     header("HTTP/1.1 401 Unauthorized");
-   // add_wrong_brute_force_attempt($username);
     $errorMessage = array('status' => 'failed', 'message' => suaa_add_new_brute_force_attempt($username));
     echo json_encode($errorMessage);
     exit; 
@@ -36,7 +35,7 @@ $username = sanitize_user($request['username']);
     update_user_meta($current_user_data->ID, 'suaa_latest_refresh_token', $newRefreshToken); 
  
     // show the json data
-    $newRefreshTokenData = array('status' => 'succes', 'refresh_token' => $newRefreshToken);
+    $newRefreshTokenData = array('status' => 'success', 'refresh_token' => $newRefreshToken);
     echo json_encode($newRefreshTokenData);
      
     } 
@@ -48,7 +47,7 @@ $username = sanitize_user($request['username']);
     }
   } else {
     header("HTTP/1.1 401 Unauthorized");
-    $errorMessage = array('status' => 'failed', 'message' => 'You have made to much wrong login attempts for this username... Try again in a few minutes.');
+    $errorMessage = array('status' => 'failed', 'message' => 'You have made to much wrong login attempts... Wait ' . get_option('suaa_brute_force_block_time') . ' min before trying again!');
     echo json_encode($errorMessage);
     exit;    
   }

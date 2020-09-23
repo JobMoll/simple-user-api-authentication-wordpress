@@ -35,7 +35,7 @@ $accessTokenValidTime = get_option('suaa_access_token_valid_length'); // needs t
     update_user_meta($validateRefreshToken, 'suaa_latest_access_token', $newAccessToken); 
     
     // show the json data
-    $newAccessTokenData = array('status' => 'succes', 'refresh_token_is_valid' => true,  'access_token' => $newAccessToken);
+    $newAccessTokenData = array('status' => 'success', 'refresh_token_is_valid' => true,  'access_token' => $newAccessToken);
     echo json_encode($newAccessTokenData);
      
     } 

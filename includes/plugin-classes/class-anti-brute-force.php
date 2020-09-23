@@ -1,9 +1,7 @@
 <?php
 
 function suaa_check_if_brute_force_is_not_reached($username) {
-	
-$bruteForceWrongAttemptsMax = 5;
-$bruteForceWrongAttemptsBlockForTimeInMinutes = '1';
+$bruteForceWrongAttemptsMax = get_option('suaa_brute_force_block_after_attempts');
 
     $user_id = suaa_check_for_email_or_username($username);
     
@@ -12,36 +10,40 @@ $bruteForceWrongAttemptsBlockForTimeInMinutes = '1';
         $bruteForceWrongAttempts = get_user_meta($user_id, 'suaa_wrong_brute_force_attempts', true);
         $bruteForceWrongAttemptsBlockEndTime = get_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', true);
         
-           $ts1 = strtotime('now');
-           $seconds_diff =  $ts1 - $bruteForceWrongAttemptsBlockEndTime;                            
-        
-        // when everything is ok return true
-        if ($bruteForceWrongAttemptsMax > intval($bruteForceWrongAttempts)) {
-            
-        return true;
-
-        // reset to 0 when the block time has expired so they can try again
-        } else if ($seconds_diff >= ($bruteForceWrongAttemptsBlockForTimeInMinutes * 60)) {
+           $timestampNow = strtotime('now');
+           $secondsDiff =  $timestampNow - $bruteForceWrongAttemptsBlockEndTime;                            
+   
+   // if attempts if lower then then the max attempts and the time since the last wrong login has expired reset the brute force attempts
+   if ($secondsDiff >= 0 && $bruteForceWrongAttemptsMax > intval($bruteForceWrongAttempts)) {
             update_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', strtotime('now'));     
             update_user_meta($user_id, 'suaa_wrong_brute_force_attempts', 0);
             return true;
-            
-            
-        // when they have a wrong password set the block time
-        } else if ($bruteForceWrongAttemptsMax <= intval($bruteForceWrongAttempts) && $seconds_diff >= 60) {
-            update_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', strtotime('+ ' . $bruteForceWrongAttemptsBlockForTimeInMinutes . ' min')); 
-            return false;
-        }
-        
+   
+   // if time is expired reset brute force         
+   } else if ($secondsDiff >= 0) {
+            update_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', strtotime('now'));     
+            update_user_meta($user_id, 'suaa_wrong_brute_force_attempts', 0);
+            return true;
+    
+    // if attempts are lower then the max attempts it's cool        
+    } else if ($bruteForceWrongAttemptsMax > intval($bruteForceWrongAttempts)) {
+        return true;
+
+    // if everything is incorrect then return false since they don't have permission to try again
     } else {
-        // username or email is not connected to an account
-        return 'Wrong username / email & password combination';
+        return false;
     }
-    return false;
+    
+  } else {
+    // username or email is not connected to an account
+    return 'Wrong username / email & password combination';
+  }
+  return false;
 }
 
 function suaa_add_new_brute_force_attempt($username) {
-$bruteForceWrongAttemptsMax = 5;
+$bruteForceWrongAttemptsMax = get_option('suaa_brute_force_block_after_attempts');
+$bruteForceWrongAttemptsBlockForTimeInMinutes = get_option('suaa_brute_force_block_time');
 
     $user_id = suaa_check_for_email_or_username($username);
     if ($user_id != false && !empty($user_id)) {
@@ -49,12 +51,19 @@ $bruteForceWrongAttemptsMax = 5;
         $oldBruteForceWrongAttempts = get_user_meta($user_id, 'suaa_wrong_brute_force_attempts', true);
         
         if ($bruteForceWrongAttemptsMax <= intval($oldBruteForceWrongAttempts)) {
-        return 'You have made to many wrong login attempts... Try again in about 5 min'; 
+         return 'You have made to many wrong login attempts... Try again in ' . $bruteForceWrongAttemptsBlockForTimeInMinutes . ' min'; 
         } else{
-        update_user_meta($user_id, 'suaa_wrong_brute_force_attempts', $oldBruteForceWrongAttempts + 1);
-        
-        return 'Wrong username / email & password combination. You have ' . (5 - ($oldBruteForceWrongAttempts + 1)) . ' attempts to go.';    
-        }
+         update_user_meta($user_id, 'suaa_wrong_brute_force_attempts', $oldBruteForceWrongAttempts + 1);
+         update_user_meta($user_id, 'suaa_wrong_brute_force_attempts_end_time', strtotime('+ ' . $bruteForceWrongAttemptsBlockForTimeInMinutes . ' min')); 
+         $attemptsToGo = ($bruteForceWrongAttemptsMax - ($oldBruteForceWrongAttempts + 1));
+       
+       if ($attemptsToGo != 0) {
+        $errorMessage = 'Wrong username / email & password combination. You have ' . $attemptsToGo . ' attempts to go';  
+       } else {
+        $errorMessage = 'This was your last login attempt... You can try again in ' . $bruteForceWrongAttemptsBlockForTimeInMinutes . ' min';  
+       }
+        return $errorMessage;
+       }
     } else {
         // username or email is not connected to an account
         return 'Wrong username / email & password combination';
@@ -74,10 +83,3 @@ function suaa_check_for_email_or_username($username) {
         return false;
     }
 }
-
-
-// 1. check i they don't already have 5 attempts
-// check if not then return true
-
-// if they already have had 5 attempts:
-// 2. check if 

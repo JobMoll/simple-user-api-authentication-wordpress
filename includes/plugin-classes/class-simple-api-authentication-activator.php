@@ -12,6 +12,10 @@ class suaa_activator {
     add_option('suaa_access_token_scheme', bin2hex(random_bytes(8)), '', 'no');
     // access token valid length
     add_option('suaa_access_token_valid_length', '+ 25 mins', '', 'no');
+    
+    // brute force
+    add_option('suaa_brute_force_block_after_attempts', 4, '', 'no');
+    add_option('suaa_brute_force_block_time', 3, '', 'no');
 	}
 
 }

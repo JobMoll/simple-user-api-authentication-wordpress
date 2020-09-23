@@ -36,7 +36,7 @@ $accessTokenScheme = get_option('suaa_access_token_scheme');
     update_user_meta($validateAccessToken, 'suaa_latest_access_token', ''); 
     }
     
-    $showSuccessMessage = array('status' => 'succes', 'access_token_is_valid' => true,  'tokens_deleted' => true);
+    $showSuccessMessage = array('status' => 'success', 'access_token_is_valid' => true,  'tokens_deleted' => true);
     echo json_encode($showSuccessMessage);
      
     } 

@@ -12,6 +12,10 @@ class suaa_uninstaller {
     delete_option('suaa_access_token_scheme');
     // access token valid length
     delete_option('suaa_access_token_valid_length');
+    
+    // brute force
+    delete_option('suaa_brute_force_block_after_attempts');
+    delete_option('suaa_brute_force_block_time');
 	}
 
 }

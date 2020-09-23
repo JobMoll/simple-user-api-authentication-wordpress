@@ -18,6 +18,14 @@ if (strpos($_SERVER["REQUEST_URI"], '/wp-admin/options-general.php?page=simple-u
     update_option('suaa_access_token_valid_length', sanitize_text_field($_POST['suaa_access_token_valid_length_value']));
     }
 
+    if (isset($_POST['suaa_brute_force_block_after_attempts'])) {
+    update_option('suaa_brute_force_block_after_attempts', sanitize_text_field($_POST['suaa_brute_force_block_after_attempts']));
+    }
+
+    if (isset($_POST['suaa_brute_force_block_time'])) {
+    update_option('suaa_brute_force_block_time', sanitize_text_field($_POST['suaa_brute_force_block_time']));
+    }
+    
     // activate the success message basic values
     add_action( 'admin_notices', 'suaa_settings_page_saved_success' );
 
@@ -26,11 +34,11 @@ if (strpos($_SERVER["REQUEST_URI"], '/wp-admin/options-general.php?page=simple-u
 // success message basic values
 function suaa_settings_page_saved_success() {
     ?>
-<div class="notice notice-success is-dismissible">
-    <p><strong>Plugin settings are saved!</strong></p>
-    <button type="button" class="notice-dismiss">
-        <span class="screen-reader-text">Dismiss this notice.</span>
-    </button>
+<div class="notice notice-success is-dismissible"> 
+	<p><strong>Plugin settings are saved!</strong></p>
+	<button type="button" class="notice-dismiss">
+		<span class="screen-reader-text">Dismiss this notice.</span>
+	</button>
 </div>
     <?php
 }
@@ -52,11 +60,11 @@ if (strpos($_SERVER["REQUEST_URI"], '/wp-admin/options-general.php?page=simple-u
 // success message reset token reset tokens
 function suaa_settings_page_token_reset_success() {
     ?>
-<div class="notice notice-success is-dismissible">
-    <p><strong>Token have been resetted succesfully!</strong></p>
-    <button type="button" class="notice-dismiss">
-        <span class="screen-reader-text">Dismiss this notice.</span>
-    </button>
+<div class="notice notice-success is-dismissible"> 
+	<p><strong>Token have been resetted succesfully!</strong></p>
+	<button type="button" class="notice-dismiss">
+		<span class="screen-reader-text">Dismiss this notice.</span>
+	</button>
 </div>
     <?php
 }
@@ -100,7 +108,7 @@ p {
     
   <h2>Refresh token:</h2>
   <h3>Secret refresh token scheme:
-  <input disabled class="inputSimpleUserAPIAuthentication" type="text" name="suaa_refresh_token_scheme_value" value="<?php echo get_option('suaa_refresh_token_scheme'); ?>" placeholder="98f71e6b28443bb9">
+  <input disabled class="inputSimpleUserAPIAuthentication" type="text" name="suaa_refresh_token_scheme_value" value="<?php echo get_option('suaa_refresh_token_scheme'); ?>">
   </h3>
   
   <h3>Refresh token valid length:
@@ -111,16 +119,26 @@ p {
   
   <h2>Access token:</h2>
   <h3>Secret access token scheme:
-  <input disabled class="inputSimpleUserAPIAuthentication" type="text" name="suaa_access_token_scheme_value" value="<?php echo get_option('suaa_access_token_scheme'); ?>" placeholder="c52d2d81a6cf2f7a">
+  <input disabled class="inputSimpleUserAPIAuthentication" type="text" name="suaa_access_token_scheme_value" value="<?php echo get_option('suaa_access_token_scheme'); ?>">
   </h3>
   
   <h3>Access token valid length:
   <input class="inputSimpleUserAPIAuthentication" type="text" name="suaa_access_token_valid_length_value" value="<?php echo get_option('suaa_access_token_valid_length'); ?>" placeholder="+ 15 mins">
   <a class="tipURL" href="https://www.w3schools.com/php/func_date_strtotime.asp" target="_blank">Check the list of valid strtotime's</a>
   </h3>
+ 
+ 
+  <h2>Anti brute force:</h2>
+  <h3>Block after how much attempts:
+  <input class="inputSimpleUserAPIAuthentication" type="text" name="suaa_brute_force_block_after_attempts" value="<?php echo get_option('suaa_brute_force_block_after_attempts'); ?>" placeholder='4'>
+  </h3>
+  
+  <h3>Block for how many minutes:
+  <input class="inputSimpleUserAPIAuthentication" type="text" name="suaa_brute_force_block_time" value="<?php echo get_option('suaa_brute_force_block_time'); ?>" placeholder="3">
+  </h3>
   
 </form>
-  <button type="submit" form="basicDataForm" style="margin-top: 15px;" class="save-button">Save version</button>
+  <button type="submit" form="basicDataForm" style="margin-top: 15px;" class="save-button">Save settings</button>
 
 
   <h2>Reset all refresh / access tokens:</h2>

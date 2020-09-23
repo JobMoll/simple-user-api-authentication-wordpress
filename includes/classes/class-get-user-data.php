@@ -19,7 +19,7 @@ $accessTokenScheme = get_option('suaa_access_token_scheme');
     $currentUserData = get_user_by('ID', $validateAccessToken);
     $currentUserDataArray = array('user_id' => $validateAccessToken, 'user_nicename' => $currentUserData->user_nicename, 'user_registered' => $currentUserData->user_registered, 'user_email' => $currentUserData->user_email);
 
-    $currentUserDataDisplay = array('status' => 'succes', 'access_token_is_valid' => true, 'user_data' => $currentUserDataArray);
+    $currentUserDataDisplay = array('status' => 'success', 'access_token_is_valid' => true, 'user_data' => $currentUserDataArray);
     echo json_encode($currentUserDataDisplay);
      
     } 

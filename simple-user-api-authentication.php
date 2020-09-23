@@ -74,8 +74,8 @@ include 'includes/plugin-classes/class-add-fields-to-user-profile.php';
 
 // add the plugin settings page to the settings menu
 include 'includes/plugin-pages/simple-user-api-authentication-settings-page.php';
-add_action( 'admin_menu', 'tidywp_admin_add_admin_menu' );
-function tidywp_admin_add_admin_menu(  ) {
+add_action( 'admin_menu', 'suaa_admin_add_admin_menu' );
+function suaa_admin_add_admin_menu(  ) {
     add_options_page(
     'Simple User API Authentication',
     'Simple User API Authentication',
@@ -84,14 +84,3 @@ function tidywp_admin_add_admin_menu(  ) {
     'suaa_settings'
     );
 }
-
-
-
-// TO-DO 3
-// Brute force check for the wp_authenticate 
-// if wrong 5 times in 5 min block the whole user login for 3 min
-// check with the unix timestamp
-
-// TO-DO 4
-// add an api endpoint for custom ACF fields
-// ability to ask for multiple at the same time
