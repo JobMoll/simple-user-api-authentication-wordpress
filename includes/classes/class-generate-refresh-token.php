@@ -54,7 +54,7 @@ $username = sanitize_user($request['username']);
 }
  
  add_action('rest_api_init', function () {
-  register_rest_route( 'simple-api-authentication', 'generate-refresh-token',array(
+  register_rest_route( 'simple-user-api-authentication', 'generate-refresh-token',array(
                 'methods'  => 'POST',
                 'callback' => 'suaa_generate_refresh_token',
 	            'permission_callback' => '__return_true',

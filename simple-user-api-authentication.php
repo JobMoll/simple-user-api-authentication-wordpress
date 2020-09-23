@@ -13,12 +13,12 @@ if (!defined('WPINC')) {
 }
 
 function activate_suaa() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-classes/class-simple-api-authentication-activator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-classes/class-simple-user-api-authentication-activator.php';
 	suaa_activator::activate();
 }
 
 function uninstall_suaa() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-classes/class-simple-api-authentication-uninstaller.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-classes/class-simple-user-api-authentication-uninstaller.php';
 	suaa_uninstaller::uninstall();
 }
 
@@ -44,25 +44,25 @@ register_uninstall_hook(__FILE__, 'uninstall_suaa');
 
 // Used for getting a refresh token using the user login credentials
 // Request: POST
-// Endpoint: wp-json/simple-api-authentication/generate-refresh-token
+// Endpoint: wp-json/simple-user-api-authentication/generate-refresh-token
 // Example body: {"username": "admin", "password": "pass"}
 include 'includes/classes/class-generate-refresh-token.php';
 
 // Used get the acccess token using the refresh token
 // Request: POST
-// Endpoint: wp-json/simple-api-authentication/generate-access-token
+// Endpoint: wp-json/simple-user-api-authentication/generate-access-token
 // Example body: {"refresh_token": "refresh_token_here"}
 include 'includes/classes/class-generate-access-token.php';
 
 // Used to get the user data safely
 // Request: GET
-// Endpoint: wp-json/simple-api-authentication/get-user-data
+// Endpoint: wp-json/simple-user-api-authentication/get-user-data
 // Example body: {"access_token": "access_token_here"}
 include 'includes/classes/class-get-user-data.php';
 
 // Used when for example logging out an user. It will destroy all the valid keys connected to their account
 // Request: POST
-// Endpoint: wp-json/simple-api-authentication/delete-user-tokens
+// Endpoint: wp-json/simple-user-api-authentication/delete-user-tokens
 // Example body: {"access_token": "access_token_here"}
 include 'includes/classes/class-delete-user-tokens.php';
 

@@ -48,7 +48,7 @@ $accessTokenValidTime = get_option('suaa_access_token_valid_length'); // needs t
  }
  
  add_action('rest_api_init', function () {
-  register_rest_route( 'simple-api-authentication', 'generate-access-token',array(
+  register_rest_route( 'simple-user-api-authentication', 'generate-access-token',array(
                 'methods'  => 'POST',
                 'callback' => 'suaa_generate_access_token',
 	            'permission_callback' => '__return_true',

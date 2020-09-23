@@ -47,7 +47,7 @@ $accessTokenScheme = get_option('suaa_access_token_scheme');
  }
  
  add_action('rest_api_init', function () {
-  register_rest_route( 'simple-api-authentication', 'delete-user-tokens',array(
+  register_rest_route( 'simple-user-api-authentication', 'delete-user-tokens',array(
                 'methods'  => 'POST',
                 'callback' => 'suaa_delete_user_tokens',
 	            'permission_callback' => '__return_true',

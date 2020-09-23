@@ -30,7 +30,7 @@ $accessTokenScheme = get_option('suaa_access_token_scheme');
  }
  
  add_action('rest_api_init', function () {
-  register_rest_route( 'simple-api-authentication', 'get-user-data',array(
+  register_rest_route( 'simple-user-api-authentication', 'get-user-data',array(
                 'methods'  => 'POST',
                 'callback' => 'suaa_get_user_data',
 	            'permission_callback' => '__return_true',
