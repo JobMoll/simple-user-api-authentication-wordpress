@@ -11,6 +11,14 @@ function suaa_show_extra_profile_fields($currentUser) {
     <table class="form-table">
 
 		<tr>
+			<th><label for="suaa_refresh_token_valid_length_user">Refresh token length in hours (user specific)</label></th>
+			<td>
+				<input type="text" name="suaa_refresh_token_valid_length_user" id="suaa_refresh_token_valid_length_user" class="regular-text" value="<?php echo esc_attr(get_the_author_meta('suaa_refresh_token_valid_length_user', $currentUser->ID)); ?>"><br/>
+				  <span class="description">Don't let the user get a new access token when this expires.</span>
+			</td>
+		</tr>
+		
+		<tr>
 			<th><label for="suaa_latest_refresh_token">Latest refresh token</label></th>
 			<td>
 				<input disabled type="text" name="suaa_latest_refresh_token" id="suaa_latest_refresh_token" class="regular-text" value="<?php echo esc_attr(get_the_author_meta('suaa_latest_refresh_token', $currentUser->ID)); ?>"><br/>

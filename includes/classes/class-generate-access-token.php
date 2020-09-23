@@ -2,13 +2,9 @@
 
 function suaa_generate_access_token(WP_REST_Request $request) {
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-check-for-necessary-stuff.php';
-	
-$refreshTokenScheme = get_option('suaa_refresh_token_scheme');
-
-$accessTokenScheme = get_option('suaa_access_token_scheme');
-$accessTokenValidTime = get_option('suaa_access_token_valid_length'); // needs to be a valid strtotime English textual datetime
 
     if (suaa_check_for_necessary_stuff() == true) {
+    $refreshTokenScheme = get_option('suaa_refresh_token_scheme');
     $refreshToken = sanitize_user($request['refresh_token']);
     $validateRefreshToken = wp_validate_auth_cookie($refreshToken, $refreshTokenScheme);
     // $validateRefreshToken returns user id if not false
@@ -19,6 +15,8 @@ $accessTokenValidTime = get_option('suaa_access_token_valid_length'); // needs t
     echo json_encode($errorMessage);
     exit; 
     } else {
+    $accessTokenScheme = get_option('suaa_access_token_scheme');
+    $accessTokenValidTime = get_option('suaa_access_token_valid_length');
 
     // destroy the old access token
     $oldAccessToken = get_user_meta($validateRefreshToken, 'suaa_latest_access_token', true);
@@ -40,7 +38,7 @@ $accessTokenValidTime = get_option('suaa_access_token_valid_length'); // needs t
      
     } 
     } else {
-    header("HTTP/1.1 401 Unauthorized");
+    header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'failed', 'message' => "Some critical function isn't working");
 	echo json_encode($errorMessage);
     exit;    

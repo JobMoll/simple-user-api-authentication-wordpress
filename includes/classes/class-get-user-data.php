@@ -3,9 +3,8 @@
 function suaa_get_user_data(WP_REST_Request $request) {
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-check-for-necessary-stuff.php';
 
-$accessTokenScheme = get_option('suaa_access_token_scheme');
-
     if (suaa_check_for_necessary_stuff() == true) {
+    $accessTokenScheme = get_option('suaa_access_token_scheme');
     $access_token = sanitize_user($request['access_token']);
     $validateAccessToken = wp_validate_auth_cookie($access_token, $accessTokenScheme);
 
@@ -24,7 +23,9 @@ $accessTokenScheme = get_option('suaa_access_token_scheme');
      
     } 
     } else {
-    header("HTTP/1.1 401 Unauthorized");
+    header('HTTP/1.1 503 Service Temporarily Unavailable');
+	$errorMessage = array('status' => 'failed', 'message' => "Some critical function isn't working");
+	echo json_encode($errorMessage);
     exit;    
     }
  }

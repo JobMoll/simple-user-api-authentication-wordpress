@@ -4,9 +4,6 @@ function suaa_generate_refresh_token(WP_REST_Request $request) {
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-check-for-necessary-stuff.php';
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-anti-brute-force.php';
 
-$refreshTokenScheme = get_option('suaa_refresh_token_scheme');
-$refreshTokenValidTime = get_option('suaa_refresh_token_valid_length');
-
 $username = sanitize_user($request['username']);
 
   if (suaa_check_if_brute_force_is_not_reached($username) == true) {
@@ -19,6 +16,8 @@ $username = sanitize_user($request['username']);
     echo json_encode($errorMessage);
     exit; 
     } else {
+    $refreshTokenScheme = get_option('suaa_refresh_token_scheme');
+
 
     // destroy the old refresh token
     $oldRefreshToken = get_user_meta($current_user_data->ID, 'suaa_latest_refresh_token', true);
@@ -28,21 +27,34 @@ $username = sanitize_user($request['username']);
     $manager->destroy($oldRefreshTokenData['token']);
     }
     
+    
     // generate a new refresh token
+    $refreshTokenValidTimeUserSpecific = get_user_meta($current_user_data->ID, 'suaa_refresh_token_valid_length_user', true);
+   
+    // 0, '', '0', false - are all considered empty
+    if (!empty($refreshTokenValidTimeUserSpecific)) {
+       $refreshTokenValidTime = $refreshTokenValidTimeUserSpecific;
+    } else {
+       $refreshTokenValidTime = get_option('suaa_refresh_token_valid_length');
+   
+    }
     $newRefreshToken = wp_generate_auth_cookie($current_user_data->ID, strtotime($refreshTokenValidTime), $refreshTokenScheme);
+ 
  
     // save the new refresh token to the user profile
     update_user_meta($current_user_data->ID, 'suaa_latest_refresh_token', $newRefreshToken); 
  
+ 
     // show the json data
-    $newRefreshTokenData = array('status' => 'success', 'refresh_token' => $newRefreshToken);
+    $newRefreshTokenData = array('status' => 'success', 'refresh_token' => $newRefreshToken, 'user_id' => $current_user_data->ID);
     echo json_encode($newRefreshTokenData);
+     
      
     } 
     } else {
-    header("HTTP/1.1 401 Unauthorized");
-    $errorMessage = array('status' => 'failed', 'message' => 'Some of the function needed for this call don\'t seem to work');
-    echo json_encode($errorMessage);
+    header('HTTP/1.1 503 Service Temporarily Unavailable');
+	$errorMessage = array('status' => 'failed', 'message' => "Some critical function isn't working");
+	echo json_encode($errorMessage);
     exit;    
     }
   } else {
