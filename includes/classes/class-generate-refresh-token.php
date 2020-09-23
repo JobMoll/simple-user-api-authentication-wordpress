@@ -17,19 +17,21 @@ $username = sanitize_user($request['username']);
     exit; 
     } else {
     $refreshTokenScheme = get_option('suaa_refresh_token_scheme');
+    $userID = $current_user_data->ID;
 
+    update_user_meta($userID, 'suaa_wrong_brute_force_attempts', 0);
 
     // destroy the old refresh token
-    $oldRefreshToken = get_user_meta($current_user_data->ID, 'suaa_latest_refresh_token', true);
+    $oldRefreshToken = get_user_meta($userID, 'suaa_latest_refresh_token', true);
     if (!empty($oldRefreshToken)) {
     $oldRefreshTokenData = wp_parse_auth_cookie($oldRefreshToken, $refreshTokenScheme);
-    $manager = WP_Session_Tokens::get_instance($current_user_data->ID);
+    $manager = WP_Session_Tokens::get_instance($userID);
     $manager->destroy($oldRefreshTokenData['token']);
     }
     
     
     // generate a new refresh token
-    $refreshTokenValidTimeUserSpecific = get_user_meta($current_user_data->ID, 'suaa_refresh_token_valid_length_user', true);
+    $refreshTokenValidTimeUserSpecific = get_user_meta($userID, 'suaa_refresh_token_valid_length_user', true);
    
     // 0, '', '0', false - are all considered empty
     if (!empty($refreshTokenValidTimeUserSpecific)) {
@@ -38,15 +40,15 @@ $username = sanitize_user($request['username']);
        $refreshTokenValidTime = get_option('suaa_refresh_token_valid_length');
    
     }
-    $newRefreshToken = wp_generate_auth_cookie($current_user_data->ID, strtotime($refreshTokenValidTime), $refreshTokenScheme);
+    $newRefreshToken = wp_generate_auth_cookie($userID, strtotime($refreshTokenValidTime), $refreshTokenScheme);
  
  
     // save the new refresh token to the user profile
-    update_user_meta($current_user_data->ID, 'suaa_latest_refresh_token', $newRefreshToken); 
+    update_user_meta($userID, 'suaa_latest_refresh_token', $newRefreshToken); 
  
  
     // show the json data
-    $newRefreshTokenData = array('status' => 'success', 'refresh_token' => $newRefreshToken, 'user_id' => $current_user_data->ID);
+    $newRefreshTokenData = array('status' => 'success', 'refresh_token' => $newRefreshToken, 'user_id' => $userID);
     echo json_encode($newRefreshTokenData);
      
      
