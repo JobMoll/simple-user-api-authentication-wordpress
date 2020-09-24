@@ -46,43 +46,43 @@ register_uninstall_hook(__FILE__, 'uninstall_suaa');
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/generate-refresh-token
 // Example body: {"username_or_email": "admin", "password": "pass"}
-include 'includes/classes/class-generate-refresh-token.php';
+include 'includes/classes/open-classes/class-generate-refresh-token.php';
 
 // Used get the acccess token using the refresh token
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/generate-access-token
 // Example body: {"refresh_token": "refresh_token_here"}
-include 'includes/classes/class-generate-access-token.php';
+include 'includes/classes/protected-classes/class-generate-access-token.php';
 
 // Used to get the user data safely
 // Request: GET
 // Endpoint: wp-json/simple-user-api-authentication/get-user-data
 // Example body: {"access_token": "access_token_here"}
-include 'includes/classes/class-get-user-data.php';
+include 'includes/classes/protected-classes/class-get-user-data.php';
 
 // Used when for example logging out an user. It will destroy all the valid keys connected to their account
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/delete-user-tokens
 // Example body: {"access_token": "access_token_here"}
-include 'includes/classes/class-delete-user-tokens.php';
+include 'includes/classes/open-classes/class-delete-user-tokens.php';
 
 // Used when the user forgot their password and wants to receive a link to get a new one
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/forgot-password
 // Example body: {"username_or_email": "username_or_email_here"}
-include 'includes/classes/class-forgot-password.php';
+include 'includes/classes/open-classes/class-forgot-password.php';
 
 // Used when a new users want to create an account
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/register-a-new-user
 // Example body: {"username": "username_here", "email": "email_here"}
-include 'includes/classes/class-register-a-new-user.php';
+include 'includes/classes/open-classes/class-register-a-new-user.php';
 
 // Used when a loggedin user wants to change their password
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/change-password
 // Example body: {"access_token": "access_token_here", "new_password": "new_password_here"}
-include 'includes/classes/class-change-password.php';
+include 'includes/classes/closed-classes/class-change-password.php';
 
 
 
