@@ -69,14 +69,20 @@ include 'includes/classes/class-delete-user-tokens.php';
 // Used when the user forgot their password and wants to receive a link to get a new one
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/forgot-password
-// Example body: {"username_or_email": "access_token_here"}
+// Example body: {"username_or_email": "username_or_email_here"}
 include 'includes/classes/class-forgot-password.php';
 
 // Used when a new users want to create an account
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/register-a-new-user
-// Example body: {"username": "username", "email": "email"}
+// Example body: {"username": "username_here", "email": "email_here"}
 include 'includes/classes/class-register-a-new-user.php';
+
+// Used when a loggedin user wants to change their password
+// Request: POST
+// Endpoint: wp-json/simple-user-api-authentication/change-password
+// Example body: {"access_token": "access_token_here", "new_password": "new_password_here"}
+include 'includes/classes/class-change-password.php';
 
 
 
