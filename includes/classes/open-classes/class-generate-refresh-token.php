@@ -12,7 +12,7 @@ $usernameOrEmail = sanitize_user($request['username_or_email']);
 
     if (is_wp_error($current_user_data)) {
     header("HTTP/1.1 401 Unauthorized");
-    $errorMessage = array('status' => 'failed', 'message' => suaa_add_new_brute_force_attempt($usernameOrEmail));
+    $errorMessage = array('status' => 'error', 'message' => suaa_add_new_brute_force_attempt($usernameOrEmail));
     echo json_encode($errorMessage);
     exit; 
     } else {
@@ -48,20 +48,20 @@ $usernameOrEmail = sanitize_user($request['username_or_email']);
  
  
     // show the json data
-    $newRefreshTokenData = array('status' => 'success', 'refresh_token' => $newRefreshToken, 'user_id' => $userID);
+    $newRefreshTokenData = array('status' => 'success', 'new_refresh_token' => $newRefreshToken, 'user_id' => $userID);
     echo json_encode($newRefreshTokenData);
      
      
     } 
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
-	$errorMessage = array('status' => 'failed', 'message' => "Some critical function isn't working");
+	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
 	echo json_encode($errorMessage);
     exit;    
     }
   } else {
     header("HTTP/1.1 401 Unauthorized");
-    $errorMessage = array('status' => 'failed', 'message' => 'You have made to much wrong login attempts... Wait ' . get_option('suaa_brute_force_block_time') . ' min before trying again!');
+    $errorMessage = array('status' => 'error', 'message' => 'You have made to much wrong login attempts... Wait ' . get_option('suaa_brute_force_block_time') . ' min before trying again!');
     echo json_encode($errorMessage);
     exit;    
   }

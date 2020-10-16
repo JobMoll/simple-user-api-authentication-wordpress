@@ -31,7 +31,7 @@ $accessTokenScheme = get_option('suaa_access_token_scheme');
      
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
-	$errorMessage = array('status' => 'failed', 'message' => "Some critical function isn't working");
+	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
 	echo json_encode($errorMessage);
     exit;    
     }

@@ -10,7 +10,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
 
     if ($validateAccessToken == false) {
     header("HTTP/1.1 401 Unauthorized");
-    $errorMessage = array('status' => 'failed', 'message' => 'This access token is invalid or revoked');
+    $errorMessage = array('status' => 'error', 'message' => 'This access token is invalid or revoked');
     echo json_encode($errorMessage);
     exit; 
     } else {
@@ -24,7 +24,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     } 
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
-	$errorMessage = array('status' => 'failed', 'message' => "Some critical function isn't working");
+	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
 	echo json_encode($errorMessage);
     exit;    
     }
