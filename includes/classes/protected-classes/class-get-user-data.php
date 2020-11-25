@@ -16,7 +16,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     } else {
 
     $currentUserData = get_user_by('ID', $validateAccessToken);
-    $currentUserDataArray = array('user_id' => $validateAccessToken, 'user_nicename' => $currentUserData->user_nicename, 'user_registered' => $currentUserData->user_registered, 'user_email' => $currentUserData->user_email);
+    $currentUserDataArray = array('user_id' => $validateAccessToken, 'user_nicename' => $currentUserData->user_nicename, 'user_first_name' => $currentUserData->first_name, 'user_last_name' => $currentUserData->last_name, 'user_registered' => $currentUserData->user_registered, 'user_email' => $currentUserData->user_email);
 
     $currentUserDataDisplay = array('status' => 'success', 'access_token_is_valid' => true, 'user_data' => $currentUserDataArray);
     echo json_encode($currentUserDataDisplay);
