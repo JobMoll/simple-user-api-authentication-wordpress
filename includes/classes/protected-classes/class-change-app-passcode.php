@@ -11,28 +11,38 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     if ($validateAccessToken == false) {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'message' => 'This access token is invalid or revoked');
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit; 
     } else {
     $newPasscode = sanitize_text_field($request['new_passcode']);
  
-    $newUserData = update_user_meta($validateAccessToken, 'suaa_app_passcode', $newPasscode);
-    
+    if ($newPasscode == false) {
+    // remove passcode    
+    $newUserData = delete_user_meta($validateAccessToken, 'suaa_app_passcode'); 
     if (is_wp_error($newUserData)) {
     $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => $newUserData->get_error_message(), 'changed_passcode' => false);
-    echo json_encode($errorMessage);
-    
+    wp_send_json($errorMessage, 200);
+    } else {
+    $successMessage = array('status' => 'success', 'title' => 'App passcode has been disabled!', 'message' => 'We have successfully disabled your app passcode!', 'changed_passcode' => true);
+    wp_send_json($successMessage, 200);
+    } 
+    } else {
+    // valid new passcode    
+    $newUserData = update_user_meta($validateAccessToken, 'suaa_app_passcode', $newPasscode); 
+    if (is_wp_error($newUserData)) {
+    $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => $newUserData->get_error_message(), 'changed_passcode' => false);
+    wp_send_json($errorMessage, 200);
     } else {
     $successMessage = array('status' => 'success', 'title' => 'Your passcode has been changed!', 'message' => 'We have successfully changed your app passcode!', 'changed_passcode' => true);
-    echo json_encode($successMessage);
-
+    wp_send_json($successMessage, 200);
     } 
+    }
 
     }
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
  }

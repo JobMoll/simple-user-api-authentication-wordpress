@@ -12,7 +12,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     if ($validateRefreshToken == false) {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'message' => 'This refresh token is invalid or revoked');
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit; 
     } else {
     $accessTokenScheme = get_option('suaa_access_token_scheme');
@@ -34,13 +34,13 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     
     // show the json data
     $newAccessTokenData = array('status' => 'success', 'refresh_token_is_valid' => true,  'new_access_token' => $newAccessToken);
-    echo json_encode($newAccessTokenData);
+    wp_send_json($newAccessTokenData, 200);
      
     } 
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
  }

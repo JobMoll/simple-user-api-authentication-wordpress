@@ -13,17 +13,17 @@ $newUser = register_new_user($username, $userEmail);
     if (is_wp_error($newUser)) {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => $newUser->get_error_message(), 'created_new_user' => false);
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit; 
     } else {
         
     $showSuccessMessage = array('status' => 'success', 'title' => 'You have been registered!', 'message' => 'Check your email to set your password!', 'created_new_user' => true);
-    echo json_encode($showSuccessMessage);
+    wp_send_json($showSuccessMessage, 200);
     }
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
  }

@@ -27,12 +27,12 @@ $accessTokenScheme = get_option('suaa_access_token_scheme');
     }
     
     $showSuccessMessage = array('status' => 'success', 'tokens_deleted' => true);
-    echo json_encode($showSuccessMessage);
+    wp_send_json($showSuccessMessage, 200);
      
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
  }

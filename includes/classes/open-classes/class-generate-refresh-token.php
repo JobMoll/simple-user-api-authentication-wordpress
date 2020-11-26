@@ -8,12 +8,12 @@ $usernameOrEmail = sanitize_user($request['username_or_email']);
 
   if (suaa_check_if_brute_force_is_not_reached($usernameOrEmail) == true) {
     if (suaa_check_for_necessary_stuff() == true) {
-    $current_user_data = wp_authenticate($usernameOrEmail, sanitize_text_field($request['password']));
+    $current_user_data = wp_authenticate($usernameOrEmail, sanitize_user($request['password']));
 
     if (is_wp_error($current_user_data)) {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'message' => suaa_add_new_brute_force_attempt($usernameOrEmail));
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit; 
     } else {
     $refreshTokenScheme = get_option('suaa_refresh_token_scheme');
@@ -49,20 +49,20 @@ $usernameOrEmail = sanitize_user($request['username_or_email']);
  
     // show the json data
     $newRefreshTokenData = array('status' => 'success', 'new_refresh_token' => $newRefreshToken, 'user_id' => $userID);
-    echo json_encode($newRefreshTokenData);
+    wp_send_json($newRefreshTokenData, 200);
      
      
     } 
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
   } else {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'message' => 'You have made to much wrong login attempts... Wait ' . get_option('suaa_brute_force_block_time') . ' min before trying again!');
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit;    
   }
 }

@@ -11,26 +11,29 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     if ($validateAccessToken == false) {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'message' => 'This access token is invalid or revoked');
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit; 
     } else {
     $userAppPasscode = get_user_meta($validateAccessToken, 'suaa_app_passcode', true);
     
     if (empty($userAppPasscode)) {
-    $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => 'Something went wrong with getting your passcode...', 'get_passcode' => false);
-    echo json_encode($errorMessage);
+    $errorMessage = array('status' => 'error', 'title' => 'User has not set a passcode', 'message' => 'The user has not set a passcode...', 'get_passcode' => false);
+    wp_send_json($errorMessage, 200);
     
     } else {
     $successMessage = array('status' => 'success', 'access_token_is_valid' => true, 'app_passcode' => $userAppPasscode);
-    echo json_encode($successMessage);
+    wp_send_json($successMessage, 200);
 
     } 
 
+    $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => 'Something went wrong with getting your passcode...', 'get_passcode' => false);
+    wp_send_json($errorMessage, 200);
+    
     }
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
  }

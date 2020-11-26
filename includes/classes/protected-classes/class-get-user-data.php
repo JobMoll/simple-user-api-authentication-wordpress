@@ -11,7 +11,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     if ($validateAccessToken == false) {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'message' => 'This access token is invalid or revoked');
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit; 
     } else {
 
@@ -19,13 +19,13 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     $currentUserDataArray = array('user_id' => $validateAccessToken, 'user_nicename' => $currentUserData->user_nicename, 'user_first_name' => $currentUserData->first_name, 'user_last_name' => $currentUserData->last_name, 'user_registered' => $currentUserData->user_registered, 'user_email' => $currentUserData->user_email);
 
     $currentUserDataDisplay = array('status' => 'success', 'access_token_is_valid' => true, 'user_data' => $currentUserDataArray);
-    echo json_encode($currentUserDataDisplay);
+    wp_send_json($currentUserDataDisplay, 200);
      
     } 
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
  }

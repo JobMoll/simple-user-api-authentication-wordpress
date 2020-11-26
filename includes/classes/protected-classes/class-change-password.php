@@ -11,7 +11,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     if ($validateAccessToken == false) {
     header("HTTP/1.1 401 Unauthorized");
     $errorMessage = array('status' => 'error', 'message' => 'This access token is invalid or revoked');
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 401);
     exit; 
     } else {
     $currentUserData = get_user_by('ID', $validateAccessToken);
@@ -21,23 +21,23 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     
     if (is_wp_error($newUserData)) {
     $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => $newUserData->get_error_message(), 'changed_password' => false);
-    echo json_encode($errorMessage);
+    wp_send_json($errorMessage, 200);
     
     } else {
     $successMessage = array('status' => 'success', 'title' => 'Your password has been changed', 'message' => 'We have successfully changed your password!', 'changed_password' => true);
-    echo json_encode($successMessage);
+    wp_send_json($successMessage, 200);
      
     } 
     // } else {
     // $successMessage = array('status' => 'error', 'title' => "Password has to be unique", 'message' => 'Your new password must be different from your old password!' . suaa_wp_check_password($newPassword, $hasedPassword, $validateAccessToken), 'changed_password' => false);
-    // echo json_encode($successMessage);
+    // wp_send_json($successMessage, 200);
     
     // }
     }
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
 	$errorMessage = array('status' => 'error', 'message' => "Some critical function isn't working");
-	echo json_encode($errorMessage);
+	wp_send_json($errorMessage, 503);
     exit;    
     }
  }
