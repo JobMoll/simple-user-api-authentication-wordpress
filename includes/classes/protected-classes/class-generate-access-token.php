@@ -5,7 +5,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
 
     if (suaa_check_for_necessary_stuff() == true) {
     $refreshTokenScheme = get_option('suaa_refresh_token_scheme');
-    $refreshToken = sanitize_user($request['refresh_token']);
+    $refreshToken = sanitize_text_field($request['refresh_token']);
     $validateRefreshToken = wp_validate_auth_cookie($refreshToken, $refreshTokenScheme);
     // $validateRefreshToken returns user id if not false
 

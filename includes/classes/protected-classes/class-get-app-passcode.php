@@ -1,6 +1,6 @@
 <?php
 
-function suaa_change_password(WP_REST_Request $request) {
+function suaa_get_app_passcode(WP_REST_Request $request) {
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-check-for-necessary-stuff.php';
 
     if (suaa_check_for_necessary_stuff() == true) {
@@ -14,25 +14,18 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     echo json_encode($errorMessage);
     exit; 
     } else {
-    $currentUserData = get_user_by('ID', $validateAccessToken);
-    $newPassword = sanitize_text_field($request['new_password']);
+    $userAppPasscode = get_user_meta($validateAccessToken, 'suaa_app_passcode', true);
     
-    $newUserData = reset_password($currentUserData, $newPassword);
-    
-    if (is_wp_error($newUserData)) {
-    $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => $newUserData->get_error_message(), 'changed_password' => false);
+    if (empty($userAppPasscode)) {
+    $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => 'Something went wrong with getting your passcode...', 'get_passcode' => false);
     echo json_encode($errorMessage);
     
     } else {
-    $successMessage = array('status' => 'success', 'title' => 'Your password has been changed', 'message' => 'We have successfully changed your password!', 'changed_password' => true);
+    $successMessage = array('status' => 'success', 'access_token_is_valid' => true, 'app_passcode' => $userAppPasscode);
     echo json_encode($successMessage);
-     
+
     } 
-    // } else {
-    // $successMessage = array('status' => 'error', 'title' => "Password has to be unique", 'message' => 'Your new password must be different from your old password!' . suaa_wp_check_password($newPassword, $hasedPassword, $validateAccessToken), 'changed_password' => false);
-    // echo json_encode($successMessage);
-    
-    // }
+
     }
     } else {
     header('HTTP/1.1 503 Service Temporarily Unavailable');
@@ -43,9 +36,9 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
  }
  
  add_action('rest_api_init', function () {
-  register_rest_route( 'simple-user-api-authentication', 'change-password',array(
+  register_rest_route( 'simple-user-api-authentication', 'get-app-passcode',array(
                 'methods'  => 'POST',
-                'callback' => 'suaa_change_password',
+                'callback' => 'suaa_get_app_passcode',
 	            'permission_callback' => '__return_true',
       ));
 });

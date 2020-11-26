@@ -4,7 +4,7 @@ function suaa_delete_user_tokens(WP_REST_Request $request) {
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-check-for-necessary-stuff.php';
 
 if (suaa_check_for_necessary_stuff() == true) {
-$userID = sanitize_user($request['user_id']);
+$userID = sanitize_text_field($request['user_id']);
 $refreshTokenScheme = get_option('suaa_refresh_token_scheme');
 $accessTokenScheme = get_option('suaa_access_token_scheme');
 

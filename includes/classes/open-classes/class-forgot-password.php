@@ -5,7 +5,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
 require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordpress/includes/plugin-classes/class-anti-brute-force.php';
 
 if (suaa_check_for_necessary_stuff() == true) {
-$usernameOrEmail = sanitize_user($request['username_or_email']);
+$usernameOrEmail = sanitize_text_field($request['username_or_email']);
 $userID = suaa_check_for_email_or_username($usernameOrEmail);
 
 if ($userID != false) {

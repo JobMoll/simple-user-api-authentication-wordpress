@@ -4,7 +4,7 @@ add_action('show_user_profile', 'suaa_show_extra_profile_fields');
 add_action('edit_user_profile', 'suaa_show_extra_profile_fields');
 
 
-function suaa_show_extra_profile_fields($currentUser) { 
+function suaa_show_extra_profile_fields($currentUser) {
 ?>
   <h3>Simple API Authentication</h3>
 
@@ -33,7 +33,15 @@ function suaa_show_extra_profile_fields($currentUser) {
 				  <span class="description">The latest access token of this user. (for debugging)</span>
 			</td>
 		</tr>		
-
+		
+		<tr>
+			<th><label for="suaa_app_passcode">App passcode</label></th>
+			<td>
+				<input disabled type="password" name="suaa_app_passcode" id="suaa_app_passcode" class="regular-text" value="<?php echo esc_attr(get_the_author_meta('suaa_app_passcode', $currentUser->ID)); ?>"><br/>
+				  <span class="description">The app passcode of the user.</span>
+			</td>
+		</tr>
+		
 		<tr>
 			<th><label for="suaa_wrong_brute_force_attempts">Brute force wrong attempts</label></th>
 			<td>

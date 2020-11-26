@@ -5,7 +5,7 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
 
     if (suaa_check_for_necessary_stuff() == true) {
     $accessTokenScheme = get_option('suaa_access_token_scheme');
-    $access_token = sanitize_user($request['access_token']);
+    $access_token = sanitize_text_field($request['access_token']);
     $validateAccessToken = wp_validate_auth_cookie($access_token, $accessTokenScheme);
 
     if ($validateAccessToken == false) {

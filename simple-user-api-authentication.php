@@ -55,7 +55,7 @@ include 'includes/classes/open-classes/class-generate-refresh-token.php';
 include 'includes/classes/protected-classes/class-generate-access-token.php';
 
 // Used to get the user data safely
-// Request: GET
+// Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/get-user-data
 // Example body: {"access_token": "access_token_here"}
 include 'includes/classes/protected-classes/class-get-user-data.php';
@@ -82,8 +82,19 @@ include 'includes/classes/open-classes/class-register-a-new-user.php';
 // Request: POST
 // Endpoint: wp-json/simple-user-api-authentication/change-password
 // Example body: {"access_token": "access_token_here", "new_password": "new_password_here"}
-include 'includes/classes/closed-classes/class-change-password.php';
+include 'includes/classes/protected-classes/class-change-password.php';
 
+// Used to get the app passcode
+// Request: POST
+// Endpoint: wp-json/simple-user-api-authentication/get-app-passcode
+// Example body: {"access_token": "access_token_here"}
+include 'includes/classes/protected-classes/class-get-app-passcode.php';
+
+// Used when changing the app passcode
+// Request: POST
+// Endpoint: wp-json/simple-user-api-authentication/change-app-passcode
+// Example body: {"access_token": "access_token_here", "new_passcode": "new_passcode_here"}
+include 'includes/classes/protected-classes/class-change-app-passcode.php';
 
 
 // Adds some elements to the user profile for the admin to see
