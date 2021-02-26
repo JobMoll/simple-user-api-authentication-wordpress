@@ -12,7 +12,7 @@ $newUser = register_new_user($username, $userEmail);
 
     if (is_wp_error($newUser)) {
     header("HTTP/1.1 401 Unauthorized");
-    $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => $newUser->get_error_message(), 'created_new_user' => false);
+    $errorMessage = array('status' => 'error', 'title' => 'Something went wrong :(', 'message' => sanitize_text_field($newUser->get_error_message()), 'created_new_user' => false);
     wp_send_json($errorMessage, 401);
     exit; 
     } else {
