@@ -1,0 +1,7 @@
+# Created by https://www.toptal.com/developers/gitignore/api/flutter,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=flutter,visualstudiocode
+
+# MacOS general
+.DS_Store
+.AppleDouble
+.LSOverride
