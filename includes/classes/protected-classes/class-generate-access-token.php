@@ -25,13 +25,14 @@ require_once ABSPATH . '/wp-content/plugins/simple-user-api-authentication-wordp
     $manager = WP_Session_Tokens::get_instance($validateRefreshToken);
     $manager->destroy($oldAccessTokenData['token']);
     }
-    
+   
     // generate a new access token
     $newAccessToken = wp_generate_auth_cookie($validateRefreshToken, strtotime($accessTokenValidTime), $accessTokenScheme);
      
     // save the new refresh token to the user profile
     update_user_meta($validateRefreshToken, 'suaa_latest_access_token', $newAccessToken); 
-    
+    update_user_meta($validateRefreshToken, 'suaa_latest_login_date_and_time', current_time('mysql')); 
+
     // show the json data
     $newAccessTokenData = array('status' => 'success', 'refresh_token_is_valid' => true,  'new_access_token' => $newAccessToken);
     wp_send_json($newAccessTokenData, 200);

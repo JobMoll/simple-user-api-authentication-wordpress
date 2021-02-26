@@ -32,7 +32,15 @@ function suaa_show_extra_profile_fields($currentUser) {
 				<input disabled type="text" name="suaa_latest_access_token" id="suaa_latest_access_token" class="regular-text" value="<?php echo esc_attr(get_the_author_meta('suaa_latest_access_token', $currentUser->ID)); ?>"><br/>
 				  <span class="description">The latest access token of this user. (for debugging)</span>
 			</td>
-		</tr>		
+		</tr>	
+		
+		<tr>
+			<th><label for="suaa_latest_login_date_and_time">Latest login</label></th>
+			<td>
+				<input disabled type="text" name="suaa_latest_login_date_and_time" id="suaa_latest_login_date_and_time" class="regular-text" value="<?php echo esc_attr(get_the_author_meta('suaa_latest_login_date_and_time', $currentUser->ID)); ?>"><br/>
+				  <span class="description">Date and time of last login.</span>
+			</td>
+		</tr>	
 		
 		<tr>
 			<th><label for="suaa_app_passcode">App passcode</label></th>

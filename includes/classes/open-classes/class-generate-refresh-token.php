@@ -8,8 +8,7 @@ $usernameOrEmail = sanitize_user($request['username_or_email']);
 
   if (suaa_check_if_brute_force_is_not_reached($usernameOrEmail) == true) {
     if (suaa_check_for_necessary_stuff() == true) {
-    // wp_authenticate does the sanitize for the user password
-    $current_user_data = wp_authenticate($usernameOrEmail, $request['password']);
+    $current_user_data = wp_authenticate($usernameOrEmail, sanitize_user($request['password']));
 
     if (is_wp_error($current_user_data)) {
     header("HTTP/1.1 401 Unauthorized");
